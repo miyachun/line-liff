@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Line Liff</title>
+</head>
+
+<body>
+  <form class="form-inline">
+    <!--First Name-->
+    <div class="form-group">
+    <label class="sr-only" for="firstName">First Name</label>
+    <input type="text" class="form-control" id="firstName" placeholder="First Name">
+    </div>
+    <!--Last Name-->
+    <div class="form-group">
+    <label class="sr-only" for="lastName">Last Name</label>
+    <input type="text" class="form-control" id="lastName" placeholder="Last Name">
+    </div>
+    
+    <!--Submit Button-->
+    <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+    </br>
+    <div id="output"></div>
+    </br>
+    <hr>
+   
+    <script>
+    function initializeLiff(myLiffId) {
+            liff.init({
+                liffId: myLiffId
+            }).then(() => {
+                if (!liff.isLoggedIn()) {
+                    alert("用戶未登入");
+                    liff.login();
+                } else {
+                  console.log('OK');     
+                }
+            }).catch((err) => {
+                console.log('初始化失敗', err);
+            });
+        }
+
+          
+        $(document).ready(function() {
+     $('form').on('submit', function(event) {
+       $.ajax({
+          data : {
+             firstName : $('#firstName').val(),
+             lastName: $('#lastName').val(),
+                 },
+             type : 'POST',
+             url : '/process'
+            })
+        .done(function(data) {
+     
+
+          liff.sendMessages([
+          {
+            type: 'text',
+            text: data.output,            
+          }
+        ]).then(res => window.alert(res.status))
+          .catch(error => window.alert(error));
+     $('#output').text(data.output).show();
+          
+      });
+      event.preventDefault();
+      });
+});       
+
+$(document).ready(function () {
+            initializeLiff('{{ liffid }}');
+        });
+    </script>
+</body>
+
+</html>
