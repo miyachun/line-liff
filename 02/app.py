@@ -42,7 +42,6 @@ def liff():
 
 @app.route('/process',methods= ['POST'])
 def process():
-  global output
   firstName = request.form['firstName']
   lastName = request.form['lastName']
   output = firstName + lastName
@@ -52,7 +51,6 @@ def process():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    global output
     input_text = event.message.text
     if input_text == '123':
         message = TemplateSendMessage(
