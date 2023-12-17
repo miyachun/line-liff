@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Line Liff</title>
+</head>
+
+<body>
+    <form action="">
+        <label for="">測試LIFF</label>
+        <input id="input" name="input" type="text">
+        <button id="submit-btn">送出</button>
+    </form>
+    <hr>
+   
+    <script>
+    function initializeLiff(myLiffId) {
+            liff.init({
+                liffId: myLiffId
+            }).then(() => {
+                if (!liff.isLoggedIn()) {
+                    alert("用戶未登入");
+                    liff.login();
+                } else {
+                  console.log('OK');     
+                }
+            }).catch((err) => {
+                console.log('初始化失敗', err);
+            });
+        }
+
+          
+ $("#submit-btn").click(function(){
+var myb = $("#input").val();       
+liff.sendMessages([
+          {
+            type: 'text',
+            text: myb,            
+          }
+        ]).then(res => window.alert(res.status))
+          .catch(error => window.alert(error));
+          
+});          
+
+$(document).ready(function () {
+            initializeLiff('{{ liffid }}');
+        });
+    </script>
+</body>
+
+</html>
